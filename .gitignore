@@ -1,0 +1,13 @@
+/target
+**/*.rs.bk
+.idea/
+.vscode/
+*.swp
+*.swo
+.direnv/
+result
+result-*
+.env
+.env.*
+!.env.example
+.compound-engineering/

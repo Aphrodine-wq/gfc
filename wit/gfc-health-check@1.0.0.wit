@@ -1,0 +1,8 @@
+package gfc:health-check@1.0.0;
+
+world health-check {
+  import host: interface {
+    log: func(level: string, message: string);
+  }
+  export check: func(inventory-json: string) -> string;
+}

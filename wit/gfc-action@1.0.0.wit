@@ -1,0 +1,7 @@
+package gfc:action@1.0.0;
+
+world action {
+  export name: func() -> string;
+  export bind: func() -> string;
+  export run: func(repository-json: string) -> string;
+}

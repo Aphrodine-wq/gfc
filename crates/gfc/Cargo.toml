@@ -1,0 +1,39 @@
+[package]
+name = "gfc"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Git Forge Cockpit — local-first repository inventory TUI"
+publish = false
+
+[[bin]]
+name = "gfc"
+path = "src/main.rs"
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+gfc-cache.workspace = true
+gfc-config.workspace = true
+gfc-daemon.workspace = true
+gfc-git.workspace = true
+gfc-schema.workspace = true
+gfc-tui.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+toml.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[dev-dependencies]
+criterion = "0.5"
+tempfile.workspace = true
+gfc-config.workspace = true
+gfc-git.workspace = true
+tokio.workspace = true
+
+[[bench]]
+name = "local_scan"
+harness = false
+path = "../../benches/local_scan.rs"

@@ -1,0 +1,17 @@
+[package]
+name = "gfc-plugin"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Capability-restricted Wasmtime plugin host"
+publish = false
+
+[dependencies]
+gfc-config.workspace = true
+gfc-schema.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+wasmtime.workspace = true
+serde.workspace = true
+serde_json.workspace = true

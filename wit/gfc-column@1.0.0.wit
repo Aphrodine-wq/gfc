@@ -1,0 +1,6 @@
+package gfc:column@1.0.0;
+
+world column {
+  export header: func() -> string;
+  export cell: func(repository-json: string) -> string;
+}

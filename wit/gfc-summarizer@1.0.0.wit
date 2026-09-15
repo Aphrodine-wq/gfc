@@ -1,0 +1,6 @@
+package gfc:summarizer@1.0.0;
+
+/// Local-model summarization. Disabled by default and never required for core triage.
+world summarizer {
+  export summarize: func(repository-json: string) -> string;
+}

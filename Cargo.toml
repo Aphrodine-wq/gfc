@@ -1,0 +1,84 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/gfc-schema",
+    "crates/gfc-config",
+    "crates/gfc-git",
+    "crates/gfc-auth",
+    "crates/gfc-providers",
+    "crates/gfc-cache",
+    "crates/gfc-plugin",
+    "crates/gfc-daemon",
+    "crates/gfc-tui",
+    "crates/gfc",
+    "plugins/sample-health-check",
+]
+default-members = ["crates/gfc"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+rust-version = "1.85"
+description = "Git Forge Cockpit — local-first repository inventory and health TUI"
+authors = ["Git Forge Cockpit contributors"]
+repository = "https://github.com/gfc-dev/gfc"
+homepage = "https://github.com/gfc-dev/gfc"
+
+[workspace.dependencies]
+gfc-schema = { path = "crates/gfc-schema" }
+gfc-config = { path = "crates/gfc-config" }
+gfc-git = { path = "crates/gfc-git" }
+gfc-auth = { path = "crates/gfc-auth" }
+gfc-providers = { path = "crates/gfc-providers" }
+gfc-cache = { path = "crates/gfc-cache" }
+gfc-plugin = { path = "crates/gfc-plugin" }
+gfc-daemon = { path = "crates/gfc-daemon" }
+gfc-tui = { path = "crates/gfc-tui" }
+
+anyhow = "1"
+axum = "0.8"
+base64 = "0.22"
+chrono = { version = "0.4", features = ["serde", "clock"] }
+clap = { version = "4", features = ["derive", "env"] }
+crossterm = "0.28"
+directories = "6"
+ed25519-dalek = { version = "2", features = ["pkcs8", "pem"] }
+hex = "0.4"
+hmac = "0.12"
+http-body-util = "0.1"
+jsonschema = "0.28"
+notify = "8"
+octocrab = "0.44"
+image = "0.25"
+ratatui = "0.29"
+ratatui-image = "8.0"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+rusqlite = { version = "0.32", features = ["bundled", "chrono"] }
+schemars = { version = "0.8", features = ["chrono"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+tempfile = "3"
+thiserror = "2"
+tokio = { version = "1", features = ["full"] }
+toml = "0.8"
+subtle = "2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+walkdir = "2"
+wasmtime = "29"
+wasmtime-wasi = "29"
+wiremock = "0.6"
+x25519-dalek = "2"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = "symbols"
+
+[profile.bench]
+inherits = "release"
+debug = true
+strip = "none"

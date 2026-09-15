@@ -1,0 +1,13 @@
+[Unit]
+Description=Git Forge Cockpit daemon
+Documentation=https://gfc.dev
+After=default.target
+
+[Service]
+Type=simple
+ExecStart=gfc daemon run
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=default.target

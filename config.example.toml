@@ -1,0 +1,73 @@
+# Git Forge Cockpit configuration
+# Every key here is also editable from the TUI settings screen.
+
+# Directory roots that are scanned for Git repositories.
+roots = ["~/src", "~/Projects"]
+
+# Explicitly registered repositories (in addition to scanned roots).
+# [[repos]]
+# path = "~/src/special"
+# tags = ["work"]
+# name = "special"
+
+# Declarative workspaces.
+# [[workspaces]]
+# name = "work"
+# match_tags = ["work"]
+# match_roots = ["~/src/work"]
+# match_providers = ["github"]
+
+# [[tags]]
+# path = "~/src/work"
+# tags = ["work"]
+
+[providers.github]
+enabled = true
+api_url = "https://api.github.com"
+
+[providers.gitlab]
+enabled = true
+api_url = "https://gitlab.com/api/v4"
+
+[providers.origin]
+enabled = true
+api_url = "https://api.cursor.com/v1/origin"
+# Full CI requires Origin app credentials in the secret service.
+app_credentials_configured = false
+
+[poll]
+local_interval_ms = 1500
+remote_interval_secs = 120
+
+[webhook]
+enabled = false
+bind = "127.0.0.1:9847"
+# github_secret_ref = "env:GFC_GITHUB_WEBHOOK_SECRET"
+# gitlab_token_ref = "env:GFC_GITLAB_WEBHOOK_TOKEN"
+
+[health]
+dirty_needs_attention = true
+fetch_stale_after_secs = 86400
+unfinished_work_stale_after_secs = 259200
+local_current_within_secs = 30
+remote_current_within_secs = 300
+
+[launch]
+editor = "${EDITOR:-xdg-open} {path}"
+terminal = "xterm -e bash -lc 'cd {path} && exec $SHELL'"
+browser = "xdg-open {url}"
+lazygit = "lazygit -p {path}"
+default_target = "editor"
+
+# [[launch.custom]]
+# name = "helix"
+# command = "hx {path}"
+
+[plugins]
+summarizer_enabled = false
+
+[auth]
+order = ["provider_cli", "secret_service", "env", "command"]
+
+[scan]
+concurrency = 12

@@ -1,0 +1,18 @@
+[package]
+name = "gfc-config"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "XDG configuration for Git Forge Cockpit"
+publish = false
+
+[dependencies]
+directories.workspace = true
+gfc-schema.workspace = true
+serde.workspace = true
+thiserror.workspace = true
+toml.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

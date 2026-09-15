@@ -1,0 +1,208 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gfc.dev/schema/repository-health.v1.json",
+  "title": "Git Forge Cockpit repository health inventory",
+  "version": "1.0.0",
+  "description": "Normalized repository-health schema. Every signal includes evidence and an updated_at timestamp. Stale cache entries must never be presented as current.",
+  "type": "object",
+  "required": ["schema_version", "generated_at", "repositories"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "1.0.0" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "repositories": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/RepositoryHealth" }
+    },
+    "errors": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ScanError" }
+    }
+  },
+  "$defs": {
+    "ProviderKind": {
+      "type": "string",
+      "enum": ["github", "gitlab", "origin", "git"]
+    },
+    "WorktreeState": {
+      "type": "string",
+      "enum": ["clean", "dirty", "conflicted"]
+    },
+    "DivergenceState": {
+      "type": "string",
+      "enum": ["synced", "ahead", "behind", "diverged", "no_upstream"]
+    },
+    "ConnectionState": {
+      "type": "string",
+      "enum": ["ok", "unavailable", "invalid"]
+    },
+    "CiState": {
+      "type": "string",
+      "enum": ["passing", "failing", "pending", "unknown", "unsupported"]
+    },
+    "StalenessState": {
+      "type": "string",
+      "enum": ["fresh", "stale"]
+    },
+    "FreshnessPresentedAs": {
+      "type": "string",
+      "enum": ["current", "cached"]
+    },
+    "ScanError": {
+      "type": "object",
+      "required": ["path", "message", "updated_at"],
+      "properties": {
+        "path": { "type": "string" },
+        "message": { "type": "string" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "RepositoryHealth": {
+      "type": "object",
+      "required": ["schema_version", "identity", "local", "remote", "staleness", "freshness"],
+      "properties": {
+        "schema_version": { "type": "string" },
+        "identity": { "$ref": "#/$defs/Identity" },
+        "local": { "$ref": "#/$defs/LocalHealth" },
+        "remote": { "$ref": "#/$defs/RemoteHealth" },
+        "staleness": { "$ref": "#/$defs/StalenessSignal" },
+        "freshness": { "$ref": "#/$defs/Freshness" },
+        "error": { "$ref": "#/$defs/ScanError" }
+      }
+    },
+    "Identity": {
+      "type": "object",
+      "required": ["id", "name", "path", "provider"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "path": { "type": "string" },
+        "provider": { "$ref": "#/$defs/ProviderKind" },
+        "remote_url": { "type": "string" },
+        "group": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "workspaces": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "LocalHealth": {
+      "type": "object",
+      "required": ["worktree", "divergence", "fetch_age"],
+      "properties": {
+        "worktree": { "$ref": "#/$defs/WorktreeSignal" },
+        "divergence": { "$ref": "#/$defs/DivergenceSignal" },
+        "fetch_age": { "$ref": "#/$defs/FetchAgeSignal" }
+      }
+    },
+    "WorktreeSignal": {
+      "type": "object",
+      "required": ["state", "evidence", "updated_at"],
+      "properties": {
+        "state": { "$ref": "#/$defs/WorktreeState" },
+        "evidence": {
+          "type": "object",
+          "required": ["modified", "staged", "untracked"],
+          "properties": {
+            "modified": { "type": "integer", "minimum": 0 },
+            "staged": { "type": "integer", "minimum": 0 },
+            "untracked": { "type": "integer", "minimum": 0 },
+            "conflicted_paths": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "DivergenceSignal": {
+      "type": "object",
+      "required": ["state", "evidence", "updated_at"],
+      "properties": {
+        "state": { "$ref": "#/$defs/DivergenceState" },
+        "evidence": {
+          "type": "object",
+          "required": ["branch", "ahead", "behind"],
+          "properties": {
+            "branch": { "type": "string" },
+            "upstream": { "type": "string" },
+            "ahead": { "type": "integer", "minimum": 0 },
+            "behind": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "FetchAgeSignal": {
+      "type": "object",
+      "required": ["updated_at"],
+      "properties": {
+        "last_fetch_at": { "type": "string", "format": "date-time" },
+        "age_secs": { "type": "integer", "minimum": 0 },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "RemoteHealth": {
+      "type": "object",
+      "required": ["connection", "ci"],
+      "properties": {
+        "connection": {
+          "type": "object",
+          "required": ["state", "evidence", "updated_at"],
+          "properties": {
+            "state": { "$ref": "#/$defs/ConnectionState" },
+            "evidence": {
+              "type": "object",
+              "properties": {
+                "message": { "type": "string" },
+                "http_status": { "type": "integer" }
+              }
+            },
+            "updated_at": { "type": "string", "format": "date-time" }
+          }
+        },
+        "ci": {
+          "type": "object",
+          "required": ["state", "evidence", "updated_at"],
+          "properties": {
+            "state": { "$ref": "#/$defs/CiState" },
+            "evidence": {
+              "type": "object",
+              "properties": {
+                "provider": { "type": "string" },
+                "check_name": { "type": "string" },
+                "sha": { "type": "string" },
+                "url": { "type": "string" },
+                "conclusion": { "type": "string" }
+              }
+            },
+            "updated_at": { "type": "string", "format": "date-time" }
+          }
+        }
+      }
+    },
+    "StalenessSignal": {
+      "type": "object",
+      "required": ["state", "evidence", "updated_at"],
+      "properties": {
+        "state": { "$ref": "#/$defs/StalenessState" },
+        "evidence": {
+          "type": "object",
+          "required": ["unfinished_work"],
+          "properties": {
+            "fetch_age_secs": { "type": "integer", "minimum": 0 },
+            "unfinished_work": { "type": "boolean" },
+            "last_activity_at": { "type": "string", "format": "date-time" },
+            "reasons": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Freshness": {
+      "type": "object",
+      "required": ["local_updated_at", "presented_as"],
+      "properties": {
+        "local_updated_at": { "type": "string", "format": "date-time" },
+        "remote_updated_at": { "type": "string", "format": "date-time" },
+        "presented_as": { "$ref": "#/$defs/FreshnessPresentedAs" },
+        "age_secs": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

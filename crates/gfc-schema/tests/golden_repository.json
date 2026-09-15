@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0.0",
+  "identity": {
+    "id": "abc123",
+    "name": "demo",
+    "path": "/tmp/demo",
+    "provider": "git",
+    "group": "tmp",
+    "tags": ["sample"],
+    "workspaces": ["personal"]
+  },
+  "local": {
+    "worktree": {
+      "state": "dirty",
+      "evidence": {
+        "modified": 2,
+        "staged": 0,
+        "untracked": 1,
+        "conflicted_paths": []
+      },
+      "updated_at": "2026-08-20T12:00:00Z"
+    },
+    "divergence": {
+      "state": "ahead",
+      "evidence": {
+        "branch": "main",
+        "upstream": "origin/main",
+        "ahead": 1,
+        "behind": 0
+      },
+      "updated_at": "2026-08-20T12:00:00Z"
+    },
+    "fetch_age": {
+      "last_fetch_at": "2026-08-20T11:00:00Z",
+      "age_secs": 3600,
+      "updated_at": "2026-08-20T12:00:00Z"
+    }
+  },
+  "remote": {
+    "connection": {
+      "state": "ok",
+      "evidence": {
+        "message": "ls-remote succeeded"
+      },
+      "updated_at": "2026-08-20T12:00:00Z"
+    },
+    "ci": {
+      "state": "passing",
+      "evidence": {
+        "provider": "github",
+        "check_name": "ci",
+        "sha": "deadbeef",
+        "conclusion": "success"
+      },
+      "updated_at": "2026-08-20T12:00:00Z"
+    }
+  },
+  "staleness": {
+    "state": "fresh",
+    "evidence": {
+      "fetch_age_secs": 3600,
+      "unfinished_work": true,
+      "last_activity_at": "2026-08-20T12:00:00Z",
+      "reasons": []
+    },
+    "updated_at": "2026-08-20T12:00:00Z"
+  },
+  "freshness": {
+    "local_updated_at": "2026-08-20T12:00:00Z",
+    "remote_updated_at": "2026-08-20T12:00:00Z",
+    "presented_as": "current",
+    "age_secs": 0
+  }
+}

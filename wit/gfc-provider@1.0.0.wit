@@ -1,0 +1,6 @@
+package gfc:provider@1.0.0;
+
+world provider {
+  export list-repos: func() -> string;
+  export remote-health: func(owner: string, repo: string, sha: string) -> string;
+}
